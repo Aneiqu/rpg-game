@@ -6,10 +6,14 @@
 
 .basic {
   position: absolute;
+  display: flex;
   height: 100px;
   width: 100px;
   background-color: rgb(136, 18, 18);
   border: 1px solid black;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   text-align: center;
   margin-top: 25px;
   z-index: 1;
@@ -21,6 +25,9 @@
   width: 115px;
   background-color: darkgreen;
   border: 1px solid black;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   text-align: center;
   margin-top: 35px;
   z-index: 1;
@@ -28,25 +35,21 @@
 }
 .healthPoints {
   font-size: 150%;
-  position: relative;
-  margin-top: 50px;
-  transform: translate(0, -325%);
-  font-weight: bold;
   z-index: 1;
+  margin-top: 25px;
+  width: 100%;
 }
 .timer {
-  font-size: 150%;
-  position: relative;
-  margin-top: 50px;
-  transform: translate(0, 90%);
   font-weight: bold;
   z-index: 1;
+  position: relative;
+  margin-top: 0px;
 }
 .prop {
   background-color: rgba(255, 255, 255, 0);
 }
 .points {
-  font-size: 150%;
+  font-size: 1.6vw;
   font-weight: bold;
   margin-left: 7.5px;
   margin-right: 7.5px;
@@ -55,21 +58,21 @@
   z-index: 5;
 }
 .wave {
-  font-size: 150%;
+  font-size: 1.6vw;
   font-weight: bold;
   padding: 1px;
   border: 1px solid black;
   z-index: 5;
 }
 .health {
-  font-size: 150%;
+  font-size: 1.6vw;
   font-weight: bold;
   padding: 1px;
   border: 1px solid black;
   z-index: 5;
 }
 .shop {
-  font-size: 150%;
+  font-size: 1.6vw;
   font-weight: bold;
   padding: 1px;
   border: 1px solid black;
@@ -79,7 +82,7 @@
   box-shadow: 2px 2px 2px black;
 }
 .damage {
-  font-size: 150%;
+  font-size: 1.6vw;
   font-weight: bold;
   padding: 1px;
   border: 1px solid black;
@@ -134,7 +137,7 @@
   z-index: 5;
 }
 .start {
-  font-size: 150%;
+  font-size: 1.6vw;
   font-weight: bold;
   margin-left: 7.5px;
   padding: 1px;
@@ -142,9 +145,21 @@
   z-index: 5;
 }
 .ready {
-  font-size: 150%;
+  font-size: 1.6vw;
   font-weight: bold;
   margin-left: 7.5px;
+  margin-right: 7.5px;
+  padding: 1px;
+  border: 1px solid black;
+  z-index: 5;
+}
+.ready:active {
+  box-shadow: 2px 2px 2px black;
+}
+.wave--timer {
+  position: relative;
+  font-size: 1.6vw;
+  font-weight: bold;
   padding: 1px;
   border: 1px solid black;
   z-index: 5;
