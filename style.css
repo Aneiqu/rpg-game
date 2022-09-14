@@ -1,0 +1,151 @@
+* {
+  font-family: "ArcadeClassic", sans-serif;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.basic {
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  background-color: rgb(136, 18, 18);
+  border: 1px solid black;
+  text-align: center;
+  margin-top: 25px;
+  z-index: 1;
+  transition: 1s;
+}
+.tank {
+  position: absolute;
+  height: 115px;
+  width: 115px;
+  background-color: darkgreen;
+  border: 1px solid black;
+  text-align: center;
+  margin-top: 35px;
+  z-index: 1;
+  transition: 1s;
+}
+.healthPoints {
+  font-size: 150%;
+  position: relative;
+  margin-top: 50px;
+  transform: translate(0, -325%);
+  font-weight: bold;
+  z-index: 1;
+}
+.timer {
+  font-size: 150%;
+  position: relative;
+  margin-top: 50px;
+  transform: translate(0, 90%);
+  font-weight: bold;
+  z-index: 1;
+}
+.prop {
+  background-color: rgba(255, 255, 255, 0);
+}
+.points {
+  font-size: 150%;
+  font-weight: bold;
+  margin-left: 7.5px;
+  margin-right: 7.5px;
+  padding: 1px;
+  border: 1px solid black;
+  z-index: 5;
+}
+.wave {
+  font-size: 150%;
+  font-weight: bold;
+  padding: 1px;
+  border: 1px solid black;
+  z-index: 5;
+}
+.health {
+  font-size: 150%;
+  font-weight: bold;
+  padding: 1px;
+  border: 1px solid black;
+  z-index: 5;
+}
+.shop {
+  font-size: 150%;
+  font-weight: bold;
+  padding: 1px;
+  border: 1px solid black;
+  z-index: 5;
+}
+.shop:active {
+  box-shadow: 2px 2px 2px black;
+}
+.damage {
+  font-size: 150%;
+  font-weight: bold;
+  padding: 1px;
+  border: 1px solid black;
+  margin-left: 7.5px;
+  margin-right: 7.5px;
+  z-index: 5;
+}
+.hidden {
+  opacity: 0;
+}
+.shop--menu {
+  height: 450px;
+  width: 750px;
+  border: 1px solid black;
+  z-index: 5;
+}
+.upgrade {
+  margin: 5px;
+  height: 115px;
+  width: 75px;
+  text-align: center;
+  transition: 0.35s;
+  border-radius: 10px;
+  z-index: 5;
+}
+.upgrade:hover {
+  box-shadow: 0px 0px 5px 1px black;
+}
+.upgrade:active {
+  background-color: rgb(146, 146, 146);
+}
+.upgrade:hover .price {
+  opacity: 1;
+}
+.shop--img {
+  position: relative;
+  height: 75px;
+  width: 75px;
+  margin-bottom: 0px;
+  z-index: 5;
+}
+.shop--text {
+  position: relative;
+  top: -17px;
+  z-index: 5;
+}
+.price {
+  transition: 0.35s;
+  position: relative;
+  top: -25px;
+  opacity: 0;
+  z-index: 5;
+}
+.start {
+  font-size: 150%;
+  font-weight: bold;
+  margin-left: 7.5px;
+  padding: 1px;
+  border: 1px solid black;
+  z-index: 5;
+}
+.ready {
+  font-size: 150%;
+  font-weight: bold;
+  margin-left: 7.5px;
+  padding: 1px;
+  border: 1px solid black;
+  z-index: 5;
+}
