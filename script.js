@@ -10,16 +10,19 @@ const start = document.querySelector(".start");
 const wave = document.querySelector(".wave");
 const ready = document.querySelector(".ready");
 const waveTimer = document.querySelector(".wave--timer");
+const dmgUpgrade = document.querySelector(".dmg--upgrade");
+const dmgUpPrice = document.querySelector(".dmg--price");
 
 class App {
   #waveOnGoing = false;
   #id = 0;
   #wave = 1;
-  #damage = 5;
+  #damage = 10;
   #health = 100;
   #points = 0;
   #hpMultiplier = 1;
   #dmgMultiplier = 1;
+  #dmgUpPrice = 50;
   constructor() {
     this.enemies = [];
     this.enemyClasses = [];
@@ -72,6 +75,8 @@ class App {
     let basicProp = this.prepareProp(["basic", "prop"]);
     // Tank enemy
     let tankProp = this.prepareProp(["tank", "prop"]);
+    // Boss enemy
+    let bossProp = this.prepareProp(["boss", "prop"]);
 
     // Creating enemy classlist with props
     this.enemyClasses = [
@@ -82,7 +87,7 @@ class App {
         health: 20,
         damage: 8,
         attackSpeed: 3,
-        value: 4,
+        value: 100,
       },
       {
         class: "Tank",
@@ -91,7 +96,16 @@ class App {
         health: 35,
         damage: 9,
         attackSpeed: 5,
-        value: 5,
+        value: 100,
+      },
+      {
+        class: "Boss",
+        width: bossProp.clientWidth,
+        height: bossProp.clientHeight,
+        health: 100,
+        damage: this.#health * 10,
+        attackSpeed: 25,
+        value: 10,
       },
     ];
     // Removing props from game
@@ -231,6 +245,7 @@ class App {
     }, 1000);
 
     this.#waveOnGoing = true;
+    if (!shopMenu.classList.contains("hidden")) shopMenu.classList.toggle("hidden");
     start.remove();
 
     // Summoning enemies during wave
@@ -311,6 +326,18 @@ class App {
       this.startWave();
     }, 5000);
   }
+  buyDmg() {
+    if (this.#points < this.#dmgUpPrice) return;
+    this.#points -= this.#dmgUpPrice;
+    this.#dmgUpPrice = this.#dmgUpPrice * 1.2;
+    dmgUpPrice.textContent = `${this.#dmgUpPrice.toFixed(2)} Points`;
+    points.textContent = `Points: ${this.#points.toFixed(0)}`;
+    this.#damage += 1.5;
+    playerDamage.textContent = `Damage: ${this.#damage}`;
+  }
+  addPoints() {
+    this.#points += 9999999999999999;
+  }
 }
 
 const rpgGame = new App();
@@ -357,3 +384,5 @@ rpgGame.prepareEnemyClasses();
 let x = () => {
   summonGroup(1, 1);
 };
+
+dmgUpgrade.addEventListener("click", rpgGame.buyDmg.bind(rpgGame));

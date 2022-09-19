@@ -33,6 +33,20 @@
   z-index: 1;
   transition: 1s;
 }
+.boss {
+  position: absolute;
+  height: 350px;
+  width: 350px;
+  background-color: rgb(202, 31, 137);
+  border: 1px solid black;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: center;
+  margin-top: 35px;
+  z-index: 1;
+  transition: 1s;
+}
 .healthPoints {
   font-size: 150%;
   z-index: 1;
