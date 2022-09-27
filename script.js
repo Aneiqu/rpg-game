@@ -3,8 +3,6 @@
 const game = document.querySelector(".game");
 const points = document.querySelector(".points");
 const playerHealth = document.querySelector(".health");
-const shop = document.querySelector(".shop");
-const shopMenu = document.querySelector(".shop--menu");
 const playerDamage = document.querySelector(".damage");
 const start = document.querySelector(".start");
 const wave = document.querySelector(".wave");
@@ -12,17 +10,23 @@ const ready = document.querySelector(".ready");
 const waveTimer = document.querySelector(".wave--timer");
 const dmgUpgrade = document.querySelector(".dmg--upgrade");
 const dmgUpPrice = document.querySelector(".dmg--price");
+const shop = document.querySelector(".shop");
+const shopMenu = document.querySelector(".shop--menu");
+const bestiary = document.querySelector(".bestiary");
+const bestiaryMenu = document.querySelector(".bestiary--menu");
 
 class App {
   #waveOnGoing = false;
   #id = 0;
   #wave = 1;
-  #damage = 10;
+  #damage = 1.25;
   #health = 100;
   #points = 0;
   #hpMultiplier = 1;
   #dmgMultiplier = 1;
   #dmgUpPrice = 50;
+  #valueIncrement = 0.25;
+  #amountOfSummoned = 2;
   constructor() {
     this.enemies = [];
     this.enemyClasses = [];
@@ -84,19 +88,19 @@ class App {
         class: "Basic",
         width: basicProp.clientWidth,
         height: basicProp.clientHeight,
-        health: 20,
-        damage: 8,
+        health: 5,
+        damage: 3,
         attackSpeed: 3,
-        value: 100,
+        value: 1,
       },
       {
         class: "Tank",
         width: tankProp.clientWidth,
         height: tankProp.clientHeight,
-        health: 35,
-        damage: 9,
+        health: 8.5,
+        damage: 1.5,
         attackSpeed: 5,
-        value: 100,
+        value: 1,
       },
       {
         class: "Boss",
@@ -105,7 +109,7 @@ class App {
         health: 100,
         damage: this.#health * 10,
         attackSpeed: 25,
-        value: 10,
+        value: 25,
       },
     ];
     // Removing props from game
@@ -116,8 +120,27 @@ class App {
       let prop = rpgGame.enemyClasses[i];
       prop.health *= this.#hpMultiplier;
       prop.damage *= this.#dmgMultiplier;
+      prop.value += this.#valueIncrement;
       prop.health = +prop.health.toFixed(1);
       prop.damage = +prop.damage.toFixed(1);
+      prop.value = +prop.value;
+    }
+  }
+  fixBestiaryStats() {
+    for (let i = 0; i < bestiaryMenu.children.length; i++) {
+      // console.log(bestiaryMenu.children[i]);
+      let word = bestiaryMenu.children[i].classList[0].slice(10);
+      let enemyData = this.enemyClasses.find((el) => el.class === word[0].toUpperCase() + word.slice(1));
+
+      let data = document.querySelectorAll(`.${bestiaryMenu.children[i].classList[0]}--data`);
+      let health = data[0];
+      let damage = data[1];
+      let attackSpeed = data[2];
+      let value = data[3];
+      health.textContent = `Health: ${enemyData.health}`;
+      damage.textContent = `Damage: ${enemyData.damage}`;
+      attackSpeed.textContent = `ASpeed: ${enemyData.attackSpeed}`;
+      value.textContent = `Value: ${enemyData.value}`;
     }
   }
   // Position generation function
@@ -219,7 +242,13 @@ class App {
   // Shop toggling function
   toggleShop() {
     if (this.#waveOnGoing) return;
+    if (!bestiaryMenu.classList.contains("hidden")) bestiaryMenu.classList.toggle("hidden");
     shopMenu.classList.toggle("hidden");
+  }
+  toggleBestiary() {
+    if (this.#waveOnGoing) return;
+    if (!shopMenu.classList.contains("hidden")) shopMenu.classList.toggle("hidden");
+    bestiaryMenu.classList.toggle("hidden");
   }
 
   // Destroying all enemies that are stil alive
@@ -246,6 +275,7 @@ class App {
 
     this.#waveOnGoing = true;
     if (!shopMenu.classList.contains("hidden")) shopMenu.classList.toggle("hidden");
+    if (!bestiaryMenu.classList.contains("hidden")) bestiaryMenu.classList.toggle("hidden");
     start.remove();
 
     // Summoning enemies during wave
@@ -254,22 +284,21 @@ class App {
       available.push(rpgGame.enemyClasses[i].class);
     }
 
-    let amountOfSummoned = 2;
     if (this.#wave % 25 === 0) {
-      amountOfSummoned++;
+      this.#amountOfSummoned += 1;
     }
 
     // Summoning enemies while wave is running
     let summoningTimer = setInterval(() => {
       if (+Math.random().toFixed(1) === 0.5) {
-        for (let i = 0; i < amountOfSummoned; i++) {
+        for (let i = 0; i < this.#amountOfSummoned; i++) {
           setTimeout(() => {
             this.createEnemy("Basic");
             this.createEnemy("Tank");
           }, 500 * Math.random() * 2);
         }
       } else {
-        for (let i = 0; i < amountOfSummoned; i++) {
+        for (let i = 0; i < this.#amountOfSummoned; i++) {
           setTimeout(() => {
             this.createEnemy(available[Math.trunc(Math.random() * (1 - 0 + 1) + 0)]);
           }, 500 * Math.random() * 2);
@@ -287,28 +316,30 @@ class App {
       this.#waveOnGoing = false;
       ready.classList.toggle("hidden");
       this.#wave++;
-    }, time * 1000);
+    }, 0);
   }
 
   readyForWave() {
     if (this.#waveOnGoing) return;
     // Game scalling with time
     if (this.#wave % 5 === 0) {
-      this.#dmgMultiplier += 0.05;
-      this.#hpMultiplier += 0.1;
+      this.#dmgMultiplier += 0.25;
+      this.#hpMultiplier += 0.75;
       this.#dmgMultiplier = +this.#dmgMultiplier.toFixed(2);
       this.#hpMultiplier = +this.#hpMultiplier.toFixed(2);
       this.fixPropStats();
+      this.fixBestiaryStats();
+    }
+    if (this.#wave % 10 === 0) {
+      this.#amountOfSummoned += 1;
     }
 
     ready.classList.toggle("hidden");
     this.#waveOnGoing = true;
 
     // Disabling shop during wave
-    if (!shopMenu.classList.contains("hidden")) {
-      shopMenu.classList.toggle("hidden");
-    }
-
+    if (!shopMenu.classList.contains("hidden")) shopMenu.classList.toggle("hidden");
+    if (!bestiaryMenu.classList.contains("hidden")) bestiaryMenu.classList.toggle("hidden");
     // Start timer
     let time = 5;
     waveTimer.textContent = `Wave  ${this.#wave}  starting in: ${time}`;
@@ -332,7 +363,7 @@ class App {
     this.#dmgUpPrice = this.#dmgUpPrice * 1.2;
     dmgUpPrice.textContent = `${this.#dmgUpPrice.toFixed(2)} Points`;
     points.textContent = `Points: ${this.#points.toFixed(0)}`;
-    this.#damage += 1.5;
+    this.#damage += 1.05;
     playerDamage.textContent = `Damage: ${this.#damage}`;
   }
   addPoints() {
@@ -365,6 +396,7 @@ let summonGroup = function (basicAmount, tankAmount) {
 };
 
 shop.addEventListener("click", rpgGame.toggleShop.bind(rpgGame));
+bestiary.addEventListener("click", rpgGame.toggleBestiary.bind(rpgGame));
 ready.addEventListener("click", rpgGame.readyForWave.bind(rpgGame));
 ////////////////////////////////////////////////////////////////
 
