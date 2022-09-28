@@ -15,7 +15,6 @@
   justify-content: center;
   flex-wrap: wrap;
   text-align: center;
-  margin-top: 25px;
   z-index: 1;
   transition: 1s;
 }
@@ -29,7 +28,6 @@
   justify-content: center;
   flex-wrap: wrap;
   text-align: center;
-  margin-top: 35px;
   z-index: 1;
   transition: 1s;
 }
@@ -43,7 +41,6 @@
   justify-content: center;
   flex-wrap: wrap;
   text-align: center;
-  margin-top: 35px;
   z-index: 1;
   transition: 1s;
 }
@@ -192,53 +189,93 @@
 }
 .bestiary--menu {
   position: absolute;
+  display: grid;
   height: 450px;
   width: 750px;
   border: 1px solid black;
-  top: 35px;
+  top: 3vw;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.bestiary--basic--prop {
+  height: 100px;
+  width: 100px;
+  background-color: rgb(136, 18, 18);
+  border: 1px solid black;
+  margin: 10px;
+  margin-right: 10px;
 }
 .bestiary--basic {
-  margin: 10px;
-  margin-top: -15px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
-.bestiary--basic:hover .bestiary--basic--data {
-  opacity: 1;
-  top: 32.5px;
+.bestiary--tank--prop {
+  height: 115px;
+  width: 115px;
+  background-color: darkgreen;
+  border: 1px solid black;
+  margin: 10px;
+  margin-right: 10px;
+}
+.bestiary--tank {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.bestiary--boss--prop {
+  height: 350px;
+  width: 350px;
+  background-color: rgb(202, 31, 137);
+  border: 1px solid black;
+  margin: 10px;
+  margin-right: 10px;
+}
+.bestiary--boss {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.bestiary--className {
+  font-size: 150%;
 }
 .bestiary--data {
+  position: relative;
+  margin: 0px;
+}
+
+.bestiary--basic:hover .bestiary--basic--data {
+  opacity: 1;
+}
+
+/* .bestiary--data {
   position: relative;
   margin: 0px;
   margin-bottom: -6px;
   margin-left: 15px;
   margin-right: 15px;
-  opacity: 0;
-}
-.bestiary--healthPoints {
-  position: relative;
-  margin: 0px;
-  margin-left: 20px;
-  margin-right: 20px;
-  font-size: 150%;
-  z-index: 1;
-  margin-top: 25px;
-}
-.bestiary--timer {
-  position: relative;
-  margin: 0px;
-  top: 25px;
-  margin-left: 20px;
-  margin-right: 20px;
-  font-weight: bold;
-  z-index: 1;
-  position: relative;
-}
-.bestiary--tank {
-  position: relative;
-  left: 125px;
-  margin: 10px;
-  margin-top: -35px;
-}
-.bestiary--tank:hover .bestiary--tank--data {
   opacity: 1;
-  top: 47.5px;
+} */
+.data--container {
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.data--container--basic {
+  width: 100px;
+  height: 100px;
+  left: 110px;
+}
+.data--container--tank {
+  width: 115px;
+  height: 115px;
+  left: 125px;
+}
+.data--container--boss {
+  width: 100px;
+  height: 350px;
+  left: 360px;
 }

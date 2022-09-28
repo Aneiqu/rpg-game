@@ -92,6 +92,7 @@ class App {
         damage: 3,
         attackSpeed: 3,
         value: 1,
+        killed: false,
       },
       {
         class: "Tank",
@@ -101,6 +102,7 @@ class App {
         damage: 1.5,
         attackSpeed: 5,
         value: 1,
+        killed: false,
       },
       {
         class: "Boss",
@@ -110,6 +112,7 @@ class App {
         damage: this.#health * 10,
         attackSpeed: 25,
         value: 25,
+        killed: false,
       },
     ];
     // Removing props from game
@@ -126,13 +129,40 @@ class App {
       prop.value = +prop.value;
     }
   }
+  updateBestiary(enemyClass) {
+    enemyClass = this.enemyClasses.find((el) => el.class === enemyClass);
+    let el = `        
+    <div class="bestiary--${enemyClass.class.toLowerCase()}--prop">
+      <div class="bestiary--${enemyClass.class.toLowerCase()}">
+        <p class="bestiary--className">${enemyClass.class}</p>
+        <div class="data--container--${enemyClass.class.toLowerCase()} data--container">
+        <p class="bestiary--${enemyClass.class.toLowerCase()}--data bestiary--data">Health: ${enemyClass.health}</p>
+        <p class="bestiary--${enemyClass.class.toLowerCase()}--data bestiary--data">Damage: ${enemyClass.damage}</p>
+        <p class="bestiary--${enemyClass.class.toLowerCase()}--data bestiary--data">ASpeed: ${enemyClass.attackSpeed}</p>
+        <p class="bestiary--${enemyClass.class.toLowerCase()}--data bestiary--data">Value: ${enemyClass.value}</p>
+        </div>
+      </div>
+    </div>
+  `;
+
+    bestiaryMenu.insertAdjacentHTML("beforeend", el);
+  }
+  // Checking if enemy have been already killed
+  checkIfKilled(enemyClass) {
+    let enemy = this.enemyClasses.find((el) => el.class === enemyClass);
+    if (!enemy.killed) {
+      enemy.killed = true;
+      this.updateBestiary(enemyClass);
+    }
+  }
   fixBestiaryStats() {
     for (let i = 0; i < bestiaryMenu.children.length; i++) {
-      // console.log(bestiaryMenu.children[i]);
-      let word = bestiaryMenu.children[i].classList[0].slice(10);
+      // console.log(bestiaryMenu.children[i].children[0]);
+      // // console.log(bestiaryMenu.children[i]);
+      let word = bestiaryMenu.children[i].children[0].classList[0].slice(10);
       let enemyData = this.enemyClasses.find((el) => el.class === word[0].toUpperCase() + word.slice(1));
 
-      let data = document.querySelectorAll(`.${bestiaryMenu.children[i].classList[0]}--data`);
+      let data = bestiaryMenu.children[i].children[0].children[1].children;
       let health = data[0];
       let damage = data[1];
       let attackSpeed = data[2];
@@ -203,7 +233,7 @@ class App {
 
     // Setting enemy position
     let pos = this.genPosition(enemyClass);
-    enemy.style.top = `${pos[0]}px`;
+    enemy.style.top = `${pos[0] + 35}px`;
     enemy.style.left = `${pos[1]}px`;
 
     // Pushing data about enemy to enemy array
@@ -230,6 +260,8 @@ class App {
     }
     // Killing enemy mechanics
     if (attackedEnemy.health <= 0) {
+      this.checkIfKilled(attackedEnemy.class);
+
       this.#points += +attackedEnemy.value;
       points.textContent = `Points: ${this.#points}`;
       clearInterval(this.enemies[this.enemies.indexOf(attackedEnemy)].attack);
@@ -239,12 +271,14 @@ class App {
       document.querySelector(`[data-id="${attackedEnemy.id}"]`).remove();
     }
   }
+
   // Shop toggling function
   toggleShop() {
     if (this.#waveOnGoing) return;
     if (!bestiaryMenu.classList.contains("hidden")) bestiaryMenu.classList.toggle("hidden");
     shopMenu.classList.toggle("hidden");
   }
+  // Bestiary toggling function
   toggleBestiary() {
     if (this.#waveOnGoing) return;
     if (!shopMenu.classList.contains("hidden")) shopMenu.classList.toggle("hidden");
@@ -279,11 +313,10 @@ class App {
     start.remove();
 
     // Summoning enemies during wave
-    let available = [];
+    let availableEnemyClasses = [];
     for (let i = 0; i < rpgGame.enemyClasses.length; i++) {
-      available.push(rpgGame.enemyClasses[i].class);
+      availableEnemyClasses.push(rpgGame.enemyClasses[i].class);
     }
-
     if (this.#wave % 25 === 0) {
       this.#amountOfSummoned += 1;
     }
@@ -300,7 +333,7 @@ class App {
       } else {
         for (let i = 0; i < this.#amountOfSummoned; i++) {
           setTimeout(() => {
-            this.createEnemy(available[Math.trunc(Math.random() * (1 - 0 + 1) + 0)]);
+            this.createEnemy(availableEnemyClasses[Math.trunc(Math.random() * (1 - 0 + 1) + 0)]);
           }, 500 * Math.random() * 2);
         }
       }
@@ -316,7 +349,7 @@ class App {
       this.#waveOnGoing = false;
       ready.classList.toggle("hidden");
       this.#wave++;
-    }, 0);
+    }, time * 1000);
   }
 
   readyForWave() {
@@ -382,7 +415,7 @@ window.addEventListener("click", function (e) {
   }
 });
 
-let summonGroup = function (basicAmount, tankAmount) {
+let summonGroup = function (basicAmount, tankAmount, bossAmount) {
   for (let i = 0; i < basicAmount; i++) {
     setTimeout(() => {
       rpgGame.createEnemy("Basic");
@@ -391,6 +424,11 @@ let summonGroup = function (basicAmount, tankAmount) {
   for (let i = 0; i < tankAmount; i++) {
     setTimeout(() => {
       rpgGame.createEnemy("Tank");
+    }, 1000 * (Math.random() * 2));
+  }
+  for (let i = 0; i < bossAmount; i++) {
+    setTimeout(() => {
+      rpgGame.createEnemy("Boss");
     }, 1000 * (Math.random() * 2));
   }
 };
